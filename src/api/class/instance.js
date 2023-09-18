@@ -1,6 +1,65 @@
 /* eslint-disable no-unsafe-optional-chaining */
 const QRCode = require('qrcode')
-const pino = require('pino')
+const pino = require('pino');
+
+function colorizeMessage(message, colorCode) {
+  return `\x1b[1m\x1b[${colorCode}m${message}\x1b[0m`; // \x1b[1m para negrito
+}
+
+function createCustomLogger() {
+  const logger = pino({
+    transport: {
+      target: 'pino-pretty',
+      options: {
+        colorize: true,
+        translateTime: 'SYS:standard',
+        levelLabel: {
+          trace: 'TRACE',
+          debug: 'DEBUG',
+          info: 'INFO',
+          warn: 'WARN',
+          error: 'ERROR',
+          fatal: 'FATAL',
+        },
+      },
+    },
+  });
+
+  const customLogger = {};
+
+  // Mapeie as cores para os níveis de log correspondentes
+  const logColors = {
+    trace: 35,  // Cor magenta para TRACE
+    debug: 34,  // Cor azul para DEBUG
+    info: 32,   // Cor verde para INFO
+    warn: 33,   // Cor amarela para WARN
+    error: 31,  // Cor vermelha para ERROR
+    fatal: 31,  // Cor vermelha para FATAL
+  };
+
+  // Mapeie emojis para os níveis de log correspondentes
+  const logEmojis = {
+    trace: ' ✔️ ',  // Emoji de sucesso para TRACE
+    debug: ' ✔️',  // Emoji de sucesso para DEBUG
+    info: ' ✔️ ',   // Emoji de sucesso para INFO
+    warn: ' ⚠️ ',   // Emoji de atenção para WARN
+    error: ' ❌' ,  // Emoji de erro para ERROR
+    fatal: ' ❌' ,  // Emoji de erro para FATAL
+  };
+
+  // Defina funções personalizadas para cada nível de log
+  ['trace', 'debug', 'info', 'warn', 'error', 'fatal'].forEach((level) => {
+    customLogger[level] = (message) => {
+      const coloredMessage = colorizeMessage(message, logColors[level]);
+      const logMessage = `${logEmojis[level]} ${coloredMessage}`;
+      logger[level](logMessage);
+    };
+  });
+
+  return customLogger;
+}
+
+const logger = createCustomLogger();
 const {
     default: makeWASocket,
     DisconnectReason,
@@ -14,13 +73,12 @@ const Chat = require('../models/chat.model')
 const axios = require('axios')
 const config = require('../../config/config')
 const downloadMessage = require('../helper/downloadMsg')
-const logger = require('pino')()
 const useMongoDBAuthState = require('../helper/mongoAuthState')
 
 class WhatsAppInstance {
     socketConfig = {
         defaultQueryTimeoutMs: undefined,
-        printQRInTerminal: false,
+        printQRInTerminal: true,
         logger: pino({
             level: config.log.level,
         }),
@@ -146,10 +204,14 @@ class WhatsAppInstance {
                         },
                         this.key
                     )
+                    logger.info(`Conectado Sessão: ${this.key}`)
+                    sock.sendPresenceUpdate('unavailable')
+                    logger.info(`Deixando presença do WhatsApp OffLine: ${this.key}`)
             }
 
             if (qr) {
                 QRCode.toDataURL(qr).then((url) => {
+                    logger.info(`Escaneie o qrcode`)
                     this.instance.qr = url
                     this.instance.qrRetry++
                     if (this.instance.qrRetry >= config.instance.maxRetryQr) {
