@@ -1,6 +1,6 @@
 const dotenv = require('dotenv')
 const mongoose = require('mongoose')
-
+const startupMessage = require('./startupMsg');
 const pino = require('pino');
 
 function colorizeMessage(message, colorCode) {
@@ -77,7 +77,7 @@ if (config.mongoose.enabled) {
         logger.info('Conectado MongoDB')
     })
 }
-
+console.log(startupMessage)
 server = app.listen(config.port, async () => {
     logger.info(`Api online na porta ${config.port}`)
     global.mongoClient = await connectToCluster(config.mongoose.url)
