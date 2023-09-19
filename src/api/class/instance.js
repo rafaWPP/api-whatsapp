@@ -205,7 +205,7 @@ class WhatsAppInstance {
                         this.key
                     )
                     logger.info(`Conectado Sessão: ${this.key}`)
-                    sock.sendPresenceUpdate('unavailable')
+                    sock.sendPresenceUpdate('unavailable',this.key)
                     logger.info(`Deixando presença do WhatsApp OffLine: ${this.key}`)
             }
 
