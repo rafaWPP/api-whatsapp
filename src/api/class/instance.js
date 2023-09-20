@@ -205,7 +205,7 @@ class WhatsAppInstance {
                         this.key
                     )
                     logger.info(`Conectado Sessão: ${this.key}`)
-                    sock.sendPresenceUpdate('unavailable')
+                    sock.sendPresenceUpdate('unavailable',this.key)
                     logger.info(`Deixando presença do WhatsApp OffLine: ${this.key}`)
             }
 
@@ -252,6 +252,7 @@ class WhatsAppInstance {
 
         // on recive new chat
         sock?.ev.on('chats.upsert', (newChat) => {
+              sock.sendPresenceUpdate('unavailable',this.key)
             //console.log('chats.upsert')
             //console.log(newChat)
             const chats = newChat.map((chat) => {
@@ -265,6 +266,7 @@ class WhatsAppInstance {
 
         // on chat change
         sock?.ev.on('chats.update', (changedChat) => {
+              sock.sendPresenceUpdate('unavailable',this.key)
             //console.log('chats.update')
             //console.log(changedChat)
             changedChat.map((chat) => {
@@ -293,6 +295,7 @@ class WhatsAppInstance {
 
         // on new mssage
         sock?.ev.on('messages.upsert', async (m) => {
+              sock.sendPresenceUpdate('unavailable',this.key)
             //console.log('messages.upsert')
             //console.log(m)
             if (m.type === 'prepend')
@@ -368,6 +371,7 @@ class WhatsAppInstance {
         })
 
         sock?.ev.on('messages.update', async (messages) => {
+              sock.sendPresenceUpdate('unavailable',this.key)
             //console.log('messages.update')
             //console.dir(messages);
         })

@@ -27,6 +27,23 @@ exports.init = async (req, res) => {
     })
 }
 
+exports.pauseSession = async (req, res) => {
+     const instance = WhatsAppInstances[req.query.key]
+    let data
+    try {
+        data = await instance.pause(req.query.key)
+    } catch (error) {
+        data = {}
+    }
+    return res.json({
+        error: false,
+        message: 'Instance paused successfully',
+        instance_data: data,
+    })
+    
+  
+};
+
 exports.qr = async (req, res) => {
     try {
         const qrcode = await WhatsAppInstances[req.query.key]?.instance.qr
