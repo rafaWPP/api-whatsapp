@@ -1,4 +1,5 @@
 const { MongoClient } = require('mongodb')
+const config = require('../../config/config')
 const pino = require('pino');
 
 function colorizeMessage(message, colorCode) {
@@ -69,7 +70,7 @@ module.exports = async function connectToCluster(uri) {
         })
         logger.info('STATE: Connecting to MongoDB')
         await mongoClient.connect()
-        logger.info('STATE: Successfully connected to MongoDB')
+        logger.info('STATE: Successfully connected to MongoDB: '+config.mongoose.dbmongo)
         return mongoClient
     } catch (error) {
         logger.error('STATE: Connection to MongoDB failed!', error)

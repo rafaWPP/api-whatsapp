@@ -8,7 +8,7 @@ class Session {
         let restoredSessions = new Array()
         let allCollections = []
         try {
-            const db = mongoClient.db('whatsapp-api')
+            const db = mongoClient.db(config.mongoose.dbmongo)
             const result = await db.listCollections().toArray()
             result.forEach((collection) => {
                 allCollections.push(collection.name)

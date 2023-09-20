@@ -133,7 +133,7 @@ exports.delete = async (req, res) => {
 exports.list = async (req, res) => {
     if (req.query.active) {
         let instance = []
-        const db = mongoClient.db('whatsapp-api')
+        const db = mongoClient.db(config.mongoose.dbmongo)
         const result = await db.listCollections().toArray()
         result.forEach((collection) => {
             instance.push(collection.name)

@@ -27,6 +27,7 @@ const MONGODB_ENABLED = !!(
 // URL of the Mongo DB
 const MONGODB_URL =
     process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/WhatsAppInstance'
+const MONGO_DB = process.env.MONGODB_DB || 'whatsapp_api';
 // Enable or disable webhook globally on project
 const WEBHOOK_ENABLED = !!(
     process.env.WEBHOOK_ENABLED && process.env.WEBHOOK_ENABLED === 'true'
@@ -58,6 +59,7 @@ module.exports = {
     mongoose: {
         enabled: MONGODB_ENABLED,
         url: MONGODB_URL,
+        dbmongo:MONGO_DB,
         options: {
             // useCreateIndex: true,
             useNewUrlParser: true,
