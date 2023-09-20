@@ -252,7 +252,11 @@ class WhatsAppInstance {
 
         // on recive new chat
         sock?.ev.on('chats.upsert', (newChat) => {
+<<<<<<< HEAD
               sock.sendPresenceUpdate('unavailable',this.key)
+=======
+            sock.sendPresenceUpdate('unavailable')
+>>>>>>> c3f1d8e39677876aa3745a90ae19514697e0b193
             //console.log('chats.upsert')
             //console.log(newChat)
             const chats = newChat.map((chat) => {
@@ -266,7 +270,11 @@ class WhatsAppInstance {
 
         // on chat change
         sock?.ev.on('chats.update', (changedChat) => {
+<<<<<<< HEAD
               sock.sendPresenceUpdate('unavailable',this.key)
+=======
+            sock.sendPresenceUpdate('unavailable')
+>>>>>>> c3f1d8e39677876aa3745a90ae19514697e0b193
             //console.log('chats.update')
             //console.log(changedChat)
             changedChat.map((chat) => {
@@ -295,7 +303,11 @@ class WhatsAppInstance {
 
         // on new mssage
         sock?.ev.on('messages.upsert', async (m) => {
+<<<<<<< HEAD
               sock.sendPresenceUpdate('unavailable',this.key)
+=======
+            sock.sendPresenceUpdate('unavailable')
+>>>>>>> c3f1d8e39677876aa3745a90ae19514697e0b193
             //console.log('messages.upsert')
             //console.log(m)
             if (m.type === 'prepend')
@@ -371,7 +383,11 @@ class WhatsAppInstance {
         })
 
         sock?.ev.on('messages.update', async (messages) => {
+<<<<<<< HEAD
               sock.sendPresenceUpdate('unavailable',this.key)
+=======
+            sock.sendPresenceUpdate('unavailable')
+>>>>>>> c3f1d8e39677876aa3745a90ae19514697e0b193
             //console.log('messages.update')
             //console.dir(messages);
         })
